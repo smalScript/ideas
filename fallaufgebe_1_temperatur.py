@@ -1,31 +1,17 @@
-import Adafruit_DHT
+import adafruit_dht
 import RPi.GPIO as GPIO
 import time
+import board
 
-# GPIO-Initialisierung
-GPIO.setmode(GPIO.BOARD) # Verwenden Sie die physische Pin-Nummerierung
-GPIO.setwarnings(False)
+dht_device = adafruit_dht.DHT22(board.D7)
 
-# Sensor- und Pin-Konfiguration
-DHT_SENSOR = Adafruit_DHT.DHT22
-DHT_PIN = 7 # Physischer Pin 7 entspricht GPIO 4 in BCM
-try:
-    while True:
-        # Lesen der Temperatur und Luftfeuchtigkeit
-        humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+while TRUE:
+    try:
+        temperatur_c =dht_device.temperatur
+        humidity = dht_device.humidity
 
-        if humidity is not None and temperature is not None:
-            # Ausgabe der Werte auf der Kommandozeile
-            print(f"Temperatur: {temperature:.1f}°C Luftfeuchtigkeit: {humidity:.1f}%")
+        print('Temp:{:.lf} C Humidity: {}%',format(temperatur_c, humidity))
+    except RecursionError as err:
+        print(err.args[0])
 
-        else:
-            print("Fehler beim Auslesen des Sensors")
-            # Wartezeit zwischen den Messungen
-            time.sleep(2)
-
-except KeyboardInterrupt:
-    print("Programm beendet")
-
-finally:
-    # GPIO-Pins aufräumen
-    GPIO.cleanup()
+    time.sleep(2.0)
